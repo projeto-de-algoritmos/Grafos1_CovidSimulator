@@ -1,0 +1,16 @@
+.headerContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    height: 7rem;
+    width: 100%;
+    background-color: var(--red-500);
+}
+
+.logo {
+    height: 70%;
+    object-fit: contain;
+
+}
