@@ -17,7 +17,7 @@ export function GraphComponent({isAdd}) {
     } else {
       prob = 0.900;
     }
-    w.prob = v.prob * prob;
+    w.prob = (1 - (1 - (v.prob*prob)/100) * (1 - w.prob/100))*100;
     node_w.color = gradient[Math.round(w.prob/10)];
     console.log(`wprob: ${w.prob} round: ${Math.round(w.prob/10)} color: ${node_w.color}`);
   }
@@ -43,8 +43,9 @@ export function GraphComponent({isAdd}) {
         for(var j = 0; j < adj[w].edges.length; j++) {
           let u = adj[w].edges[j];
           if (!verified[u]) {
-            s.push(u);
             verified[u] = true;
+            if (adj[u].prob != 100.0)
+              s.push(u);
             contaminate(graph.nodes[w], graph.nodes[u]);
           }
         }
