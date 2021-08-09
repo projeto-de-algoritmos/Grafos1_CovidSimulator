@@ -3,7 +3,73 @@ import {useState} from 'react';
 
 export function GraphComponent({isAdd}) {
 
-  console.log(`fora ${isAdd}`);
+  const bfs = () => {
+    const nodes = graph.nodes.filter(node => {return node.color == "red"});
+    for(var i = 0; i < nodes.length; i++) {
+      let v = nodes[i];
+
+      var s = [];
+      var verified = Array(adj.length).fill(false);
+
+      verified[v.id] = true;
+      s.push(v.id);
+      while(s.length > 0){
+        var w = s.pop();
+        graph.nodes[w].color = colors[graph.nodes[w].color];
+        setState(({ graph, ...rest }) => {
+          return {
+            graph,
+            ...rest
+          }
+        });
+        for(var j = 0; j < adj[w].length; j++) {
+          let u = adj[w][j];
+          if (!verified[u]) {
+            s.push(u);
+            verified[u] = true;
+          }
+        }
+      }
+      
+    }
+  }
+  const adj = [
+    [1],
+    [0, 2],
+    [1, 3],
+    [2, 4],
+    [3, 5],
+    [4, 6],
+    [5, 7],
+    [6, 8],
+    [7, 9],
+    [8, 10],
+    [9, 11],
+    [10, 12],
+    [11, 13],
+    [12]
+  ]
+
+
+  const buildNodes = () => {
+    const nodes = []
+    for (var i = 0; i < adj.length; i++) {
+      nodes.push({id: i, color: "gray"});
+    }
+    return nodes;
+   
+  }
+
+  const buildEdges = () => {
+    const edges = []
+    for (var i = 0; i < adj.length; i++) {
+      for(var j = 0; j < adj[i].length; j++) {
+        edges.push({from: i, to: adj[i][j]});
+      }
+    }
+    return edges;
+  }
+
   const colors = {
     "gray": "black",
     "black": "red",
@@ -15,7 +81,7 @@ export function GraphComponent({isAdd}) {
     const node = graph.nodes.find(node => {return node.id == id});
     const color = node.color;
     node.color = colors[color];
-    setState(({ add, graph, ...rest }) => {
+    setState(({ graph, ...rest }) => {
       return {
         graph,
         ...rest
@@ -45,98 +111,31 @@ export function GraphComponent({isAdd}) {
   const [state, setState] = useState({
     counter: 5,
     graph: {
-      nodes: [
-        { id: 1, color: "gray" },
-        { id: 2, color: "gray" },
-        { id: 3, color: "gray" },
-        { id: 4, color: "gray" },
-        { id: 5, color: "gray" },
-        { id: 6, color: "gray" },
-        { id: 7, color: "gray" },
-        { id: 8, color: "gray" },
-        { id: 9, color: "gray" },
-        { id: 10, color: "gray" },
-        { id: 11, color: "gray" },
-        { id: 12, color: "gray" },
-        { id: 13, color: "gray" },
-        { id: 14, color: "gray" },
-        { id: 15, color: "gray" },
-        { id: 16, color: "gray" },
-        { id: 17, color: "gray" },
-        { id: 18, color: "gray" },
-        { id: 19, color: "gray" },
-        { id: 20, color: "gray" },
-        { id: 21, color: "gray" },
-        { id: 22, color: "gray" },
-        { id: 23, color: "gray" },
-        { id: 24, color: "gray" },
-        { id: 25, color: "gray" },
-        { id: 26, color: "gray" },
-        { id: 27, color: "gray" },
-        { id: 28, color: "gray" },
-        { id: 29, color: "gray" },
-        { id: 30, color: "gray" }
-      ],
-      edges: [
-        { from: 1, to: 30 },
-        { from: 1, to: 5 },
-        { from: 2, to: 21 },
-        { from: 2, to: 13 },
-        { from: 3, to: 15 },
-        { from: 3, to: 5 },
-        { from: 4, to: 4 },
-        { from: 4, to: 3 },
-        { from: 5, to: 16 },
-        { from: 5, to: 14 },
-        { from: 6, to: 25 },
-        { from: 6, to: 28 },
-        { from: 7, to: 11 },
-        { from: 7, to: 17 },
-        { from: 8, to: 1  },
-        { from: 9, to: 19 },
-        { from: 9, to: 12 },
-        { from: 10, to: 6 },
-        { from: 11, to: 22 },
-        { from: 12, to: 29 },
-        { from: 13, to: 24 },
-        { from: 14, to: 11 },
-        { from: 15, to: 5 },
-        { from: 16, to: 16 },
-        { from: 17, to: 25 },
-        { from: 18, to: 1 },
-        { from: 19, to: 2 },
-        { from: 20, to: 19 },
-        { from: 21, to: 12 },
-        { from: 22, to: 22 },
-        { from: 23, to: 27 },
-        { from: 24, to: 5 },
-        { from: 25, to: 14 },
-        { from: 26, to: 18 },
-        { from: 27, to: 7 },
-        { from: 28, to: 30 },
-        { from: 29, to: 2 },
-        { from: 30, to: 5 }
-      ]
+      nodes: buildNodes(),
+      edges: buildEdges()
     },
     events: {
       selectNode: ({ nodes}) => {
         changeState(nodes[0]);
       },
+      doubleClick: () => {
+        bfs();
+      }
     }
   })
 
   const { graph, events } = state;
 
   return (
-    <Graph
-    key = {Math.random()}
-      graph={graph}
-      options={options}
-      events={events}
-      getNetwork={network => {
+      <Graph
+      key = {Math.random()}
+        graph={graph}
+        options={options}
+        events={events}
+        getNetwork={network => {
         //  if you want access to vis.js network api you can set the state in a parent component using this property
-      }}
-    />
+        }}
+      />
   );
 }
 
