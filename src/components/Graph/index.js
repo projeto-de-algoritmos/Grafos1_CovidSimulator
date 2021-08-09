@@ -17,7 +17,6 @@ export function GraphComponent({isAdd}) {
       prob = 0.900;
     }
     w.prob = (1 - (1 - (v.prob*prob)/100) * (1 - w.prob/100))*100;
-    console.log(`v(${node_v.id}) prob: ${v.prob} | w(${node_w.id}) prob: ${w.prob}`)
     node_w.color = gradient[Math.round(w.prob/10)];
   }
 
@@ -32,8 +31,6 @@ export function GraphComponent({isAdd}) {
       verified[v.id] = true;
       s.push(v.id);
       v.color = gradient[10];
-
-      console.log(v.id);
 
       while(s.length > 0){
         var w = s.shift();
@@ -93,7 +90,7 @@ export function GraphComponent({isAdd}) {
   const buildNodes = () => {
     const nodes = []
     for (var i = 0; i < adj.length; i++) {
-      nodes.push({id: i, color: "gray", lable: "a"});
+      nodes.push({id: i, color: "gray"});
     }
     return nodes;
    
