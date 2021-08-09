@@ -6,7 +6,6 @@ export function GraphComponent({isAdd}) {
   const contaminate = (node_v, node_w) => {
     let v = adj[node_v.id];
     let w = adj[node_w.id];
-    console.log(`vprob: ${v.prob} wprob: ${w.prob}`);
     let prob;
     if (v.mask && w.mask) {
       prob = 0.015;
@@ -19,7 +18,6 @@ export function GraphComponent({isAdd}) {
     }
     w.prob = (1 - (1 - (v.prob*prob)/100) * (1 - w.prob/100))*100;
     node_w.color = gradient[Math.round(w.prob/10)];
-    console.log(`wprob: ${w.prob} round: ${Math.round(w.prob/10)} color: ${node_w.color}`);
   }
 
   const bfs = () => {
@@ -32,42 +30,60 @@ export function GraphComponent({isAdd}) {
 
       verified[v.id] = true;
       s.push(v.id);
+      v.color = gradient[10];
+      
       while(s.length > 0){
         var w = s.pop();
+
+        for(var j = 0; j < adj[w].edges.length; j++) {
+          let u = adj[w].edges[j];
+          if (!verified[u]) {
+            verified[u] = true;
+            if (adj[u].prob != 100.0) {
+              s.push(u);
+            }
+            contaminate(graph.nodes[w], graph.nodes[u]);
+          }
+        }
+
         setState(({ graph, ...rest }) => {
           return {
             graph,
             ...rest
           }
         });
-        for(var j = 0; j < adj[w].edges.length; j++) {
-          let u = adj[w].edges[j];
-          if (!verified[u]) {
-            verified[u] = true;
-            if (adj[u].prob != 100.0)
-              s.push(u);
-            contaminate(graph.nodes[w], graph.nodes[u]);
-          }
-        }
       }
       
     }
   }
   const adj = [
-    {mask: false, prob: 0.0, edges: [1]},
-    {mask: false, prob: 0.0, edges: [0, 2]},
-    {mask: false, prob: 0.0, edges: [1, 3]},
-    {mask: false, prob: 0.0, edges: [2, 4]},
-    {mask: false, prob: 0.0, edges: [3, 5]},
-    {mask: false, prob: 0.0, edges: [4, 6]},
-    {mask: false, prob: 0.0, edges: [5, 7]},
-    {mask: false, prob: 0.0, edges: [6, 8]},
-    {mask: false, prob: 0.0, edges: [7, 9]},
-    {mask: false, prob: 0.0, edges: [8, 10]},
-    {mask: false, prob: 0.0, edges: [9, 11]},
-    {mask: false, prob: 0.0, edges: [10, 12]},
-    {mask: false, prob: 0.0, edges: [11, 13]},
-    {mask: false, prob: 0.0, edges: [12]}
+    {mask: false, prob: 0.0, edges: [1, 7, 12, 14, 23, 7]}, //0
+    {mask: false, prob: 0.0, edges: [0, 2, 4, 13]}, // 1
+    {mask: false, prob: 0.0, edges: [1, 3, 17, 10, 22]},// 2
+    {mask: false, prob: 0.0, edges: [2, 4, 6, 14]},// 3
+    {mask: false, prob: 0.0, edges: [1, 3, 5, 9, 16]}, // 4
+    {mask: false, prob: 0.0, edges: [4, 6, 18, 21]}, // 5
+    {mask: false, prob: 0.0, edges: [5, 7, 3, 11, 18, 24]}, // 6
+    {mask: false, prob: 0.0, edges: [0, 6, 8, 15]}, // 7
+    {mask: false, prob: 0.0, edges: [7, 9, 20]}, // 8
+    {mask: false, prob: 0.0, edges: [8, 10, 4, 17, 19]}, // 9
+    {mask: false, prob: 0.0, edges: [2, 9, 11, 22, 26, 25]}, // 10
+    {mask: false, prob: 0.0, edges: [10, 12, 6, 17, 23]}, // 11
+    {mask: false, prob: 0.0, edges: [0, 11, 13, 24]}, // 12
+    {mask: false, prob: 0.0, edges: [1, 12]}, // 13
+    {mask: false, prob: 0.0, edges: [0, 3, 23, 15, 16, 23]}, // 14
+    {mask: false, prob: 0.0, edges: [14, 7, 16, 17, 18, 22, 26]}, // 15
+    {mask: false, prob: 0.0, edges: [15, 4, 14, 17]}, // 16
+    {mask: false, prob: 0.0, edges: [2, 11, 16, 18, 9, 15, 23]}, // 17
+    {mask: false, prob: 0.0, edges: [5, 15, 17, 6, 19]}, // 18
+    {mask: false, prob: 0.0, edges: [9, 18, 21]}, // 19
+    {mask: false, prob: 0.0, edges: [8, 21]}, // 20
+    {mask: false, prob: 0.0, edges: [20, 5, 19, 22]}, // 21
+    {mask: false, prob: 0.0, edges: [21, 2, 15, 10, 23]}, // 22
+    {mask: false, prob: 0.0, edges: [0, 22, 11, 14, 17, 24]}, // 23
+    {mask: false, prob: 0.0, edges: [6, 23, 12, 25]}, // 24
+    {mask: false, prob: 0.0, edges: [10, 24]}, // 25
+    {mask: false, prob: 0.0, edges: [10, 15]} // 26
   ]
 
 
@@ -113,7 +129,11 @@ export function GraphComponent({isAdd}) {
   const changeState = (id) => {
     const node = graph.nodes.find(node => {return node.id == id});
     const color = node.color;
-    node.color = colors[color];
+    if (color in colors) {
+      node.color = colors[color];
+    } else {
+      node.color = "gray";
+    }
 
     if (node.color == "red") {
       adj[node.id].prob = 100.0;
