@@ -31,7 +31,7 @@ export function GraphComponent({isAdd}) {
       verified[v.id] = true;
       s.push(v.id);
       v.color = gradient[10];
-      
+
       while(s.length > 0){
         var w = s.pop();
 
@@ -162,18 +162,21 @@ export function GraphComponent({isAdd}) {
   const options = {
     layout: {
       hierarchical: false,
-      randomSeed: 10
+      randomSeed: 16,
     },
     edges: {
       color: "#000000"
     },
     nodes: {
-        fixed: true
+        fixed: false
     },
     height: "100%",
     interaction: {
         selectConnectedEdges: false,
         multiselect: true
+    },
+    physics: {
+      enabled: false
     }
   };
 
