@@ -33,7 +33,7 @@ export function GraphComponent({isAdd}) {
       v.color = gradient[10];
 
       while(s.length > 0){
-        var w = s.pop();
+        var w = s.shift();
 
         for(var j = 0; j < adj[w].edges.length; j++) {
           let u = adj[w].edges[j];
@@ -204,6 +204,10 @@ export function GraphComponent({isAdd}) {
         graph={graph}
         options={options}
         events={events}
+        style={{
+          width: '60%',
+          height: '85%',
+        }}
         getNetwork={network => {
         //  if you want access to vis.js network api you can set the state in a parent component using this property
         }}
