@@ -204,6 +204,10 @@ export function GraphComponent({isAdd}) {
         graph={graph}
         options={options}
         events={events}
+        style={{
+          width: '60%',
+          height: '85%',
+        }}
         getNetwork={network => {
         //  if you want access to vis.js network api you can set the state in a parent component using this property
         }}

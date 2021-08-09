@@ -6,11 +6,13 @@ import './styles.css';
 export function SimulatorPage() {
     return (
         <div
-        className='container'
-        style={{
-            flexDirection: 'row',
-            padding: 20,
-        }}
+            className='container'
+            style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: 15,
+            }}
         >
             <div
                 style={{
@@ -109,19 +111,39 @@ export function SimulatorPage() {
                     ></span>
                     <b>Com Máscara</b>
                 </div>
-                <p 
-                    style={{ 
-                        textAlign: 'center',  
+                <p
+                    style={{
+                        textAlign: 'center',
                         marginTop: 15,
                         marginBottom: 15,
                         width: 300,
                     }}
                 >
-                    Clique duas vezes em uma aresta para ver o resultado.
-                    Quanto mais vermelho um nó aparecer após o resultado,
-                    maior a chance de ter sido infectado, e quanto mais branco
-                    ele estiver menor será esta chance.
+                    Clique duas vezes na área em branco dentro do container
+                    do grafo para ver o resultado. Quanto mais vermelho um nó
+                    aparecer após o resultado, maior a chance de ter sido infectado,
+                    e quanto mais branco ele estiver menor será esta chance.
                 </p>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}
+                >
+                    <p>100%</p>
+                    <span
+                        style={{
+                            height: 20,
+                            width: 250,
+                            background: 'linear-gradient(to right, red , white)',
+                            marginLeft: 15,
+                            marginRight: 15,
+                            border: '1px solid black',
+                        }}
+                    ></span>
+                    <p>0%</p>
+                </div>
             </div>
             <GraphComponent />
         </div>

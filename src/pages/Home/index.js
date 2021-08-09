@@ -122,7 +122,8 @@ export function HomePage() {
                 }}
             >
                 Após fazer as alterções de cor que preferir, basta clicar
-                duas vezes em uma aresta para ver o resultado da simulação.
+                duas vezes na área em branco do container do grafo
+                para ver o resultado da simulação.
                 O vírus será espalhado através do grafo e o resultado se dará
                 através da mudança de cor dos nós para um gradiente entre o vermelho
                 e o branco, quanto mais branco menor a possibilidade de ter pego covid.
